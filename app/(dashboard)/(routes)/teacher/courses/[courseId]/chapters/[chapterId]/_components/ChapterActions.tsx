@@ -23,17 +23,17 @@ const ChapterActions = ({
 	isPublished,
 }: ChapterActionsProps) => {
 	const [isLoading, setIsLoading] = useState(false);
-    const router = useRouter()
+	const router = useRouter();
 
 	const onDelete = async () => {
 		try {
 			setIsLoading(true);
 
-            await axios.delete(`/api/courses/${courseId}/chapters/${chapterId}`)
+			await axios.delete(`/api/courses/${courseId}/chapters/${chapterId}`);
 
-            toast.success('Chapter deleted!')
-            router.refresh()
-            router.push(`/teacher/courses/${courseId}`)
+			toast.success("Chapter deleted!");
+			router.refresh();
+			router.push(`/teacher/courses/${courseId}`);
 		} catch (error) {
 			toast.error("Something went wrong. Please try again later.");
 		} finally {
@@ -41,8 +41,14 @@ const ChapterActions = ({
 		}
 	};
 
-	const onClick = async () =>{
-	}
+	const onClick = async () => {
+		try {
+		} catch (error) {
+			toast.error("Something went wrong");
+		} finally {
+			setIsLoading(false);
+		}
+	};
 
 	return (
 		<div className="flex items-center gap-x-2 ">
