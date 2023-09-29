@@ -9,19 +9,17 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
 
-interface ChapterActionsProps {
+interface CourseActionsProps {
 	disabled: boolean;
 	courseId: string;
-	chapterId: string;
 	isPublished: boolean;
 }
 
-const ChapterActions = ({
+const CourseActions = ({
 	disabled,
 	courseId,
-	chapterId,
 	isPublished,
-}: ChapterActionsProps) => {
+}: CourseActionsProps) => {
 	const [isLoading, setIsLoading] = useState(false);
 	const router = useRouter();
 
@@ -29,11 +27,11 @@ const ChapterActions = ({
 		try {
 			setIsLoading(true);
 
-			await axios.delete(`/api/courses/${courseId}/chapters/${chapterId}`);
+			await axios.delete(`/api/courses/${courseId}`);
 
-			toast.success("Chapter deleted!");
+			toast.success("Course deleted!");
 			router.refresh();
-			router.push(`/teacher/courses/${courseId}`);
+			router.push(`/teacher/courses/`);
 		} catch (error) {
 			toast.error("Something went wrong. Please try again later.");
 		} finally {
@@ -46,18 +44,14 @@ const ChapterActions = ({
 			setIsLoading(true);
 
 			if (isPublished) {
-				await axios.patch(
-					`/api/courses/${courseId}/chapters/${chapterId}/unpublish`
-				);
-				toast.success("Chapter unpublished!");
+				await axios.patch(`/api/courses/${courseId}/unpublish`);
+				toast.success("Course unpublished!");
 			} else {
-				await axios.patch(
-					`/api/courses/${courseId}/chapters/${chapterId}/publish`
-				);
-				toast.success("Chapter published!");
+				await axios.patch(`/api/courses/${courseId}/publish`);
+				toast.success("Course published!");
 			}
 
-			router.refresh()
+			router.refresh();
 		} catch (error) {
 			toast.error("Something went wrong");
 		} finally {
@@ -85,4 +79,4 @@ const ChapterActions = ({
 	);
 };
 
-export default ChapterActions;
+export default CourseActions;
