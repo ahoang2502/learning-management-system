@@ -1,3 +1,5 @@
+import { isTeacher } from "@/lib/teacher";
+
 import { auth } from "@clerk/nextjs";
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 
@@ -5,7 +7,9 @@ const f = createUploadthing();
 
 const handleAuth = () => {
 	const { userId } = auth();
-	if (!userId) throw new Error("Unauthorized.");
+	const isAuthorized = isTeacher(userId);
+
+	if (!userId || !isAuthorized) throw new Error("Unauthorized.");
 
 	return { userId };
 };
@@ -18,7 +22,7 @@ export const ourFileRouter = {
 	courseAttachment: f(["text", "image", "video", "audio", "pdf"])
 		.middleware(() => handleAuth())
 		.onUploadComplete(() => {}),
-        
+
 	chapterVideo: f({ video: { maxFileCount: 1, maxFileSize: "512GB" } })
 		.middleware(() => handleAuth())
 		.onUploadComplete(() => {}),
